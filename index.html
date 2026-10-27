@@ -117,13 +117,43 @@
     margin-bottom: -2px;
   }
 
-  .avatar-picker {
+  .avatar-row {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
   }
 
+  .avatar-picker {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    padding: 4px 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .avatar-picker::-webkit-scrollbar { display: none; }
+
+  .avatar-arrow {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--accent);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0 2px;
+  }
+  .avatar-arrow:hover:not(:disabled) { background: #FFEAF4; }
+  .avatar-arrow:disabled { opacity: 0.3; cursor: default; }
+
   .avatar-option {
+    flex-shrink: 0;
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -200,6 +230,46 @@
     color: var(--ink-soft);
     min-height: 14px;
   }
+  /* --- Réponses --- */
+  .comment-replies {
+    margin: 0 0 6px 28px;
+    padding-left: 12px;
+    border-left: 3px solid var(--line);
+  }
+  .comment-replies .comment-item { padding: 10px 0; }
+  .comment-replies .comment-avatar { width: 42px; height: 42px; }
+  .comment-replies .comment-name { font-size: 14px; }
+
+  .reply-btn {
+    background: none;
+    border: none;
+    padding: 4px 0 0;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .reply-btn:hover { color: var(--accent); text-decoration: underline; }
+
+  .reply-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: #FFEAF4;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .reply-banner[hidden] { display: none; }
+  .reply-banner button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--ink-soft);
+  }
 </style>
 </head>
 <body>
@@ -207,19 +277,26 @@
 <div class="comments-panel">
   <div class="comments-header">💬 Commentaires</div>
 
-  <div class="comments-list" id="commentsList">
-    <p class="comments-empty">Chargement des commentaires…</p>
-  </div>
+  <div class="comments-list" id="commentsList"><div class="comment-item"><img class="comment-avatar" src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/panthere.jpg" alt=""><div class="comment-body"><div class="comment-top"><span class="comment-name" style="color: rgb(222, 40, 124);">ezra</span><span class="comment-date">23 octobre 2026 à 00:38</span></div><div class="comment-text">ouiiiiiii</div><button type="button" class="reply-btn">Répondre</button></div></div><div class="comment-item"><img class="comment-avatar" src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/panthere.jpg" alt=""><div class="comment-body"><div class="comment-top"><span class="comment-name" style="color: rgb(222, 40, 124);">ezra</span><span class="comment-date">23 octobre 2026 à 00:26</span></div><div class="comment-text">stp marche</div><button type="button" class="reply-btn">Répondre</button></div></div></div>
 
   <form class="comment-form" id="commentForm">
     <div class="field-label">Ton avatar</div>
-    <div class="avatar-picker" id="avatarPicker"></div>
+    <div class="avatar-row">
+      <button type="button" class="avatar-arrow" id="avatarPrev" aria-label="Avatars précédents" disabled="">‹</button>
+      <div class="avatar-picker" id="avatarPicker"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/Triceratops_White.jpg" class="avatar-option selected" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/sorciere.png" class="avatar-option" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/rat.jpg" class="avatar-option" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/raton.jpg" class="avatar-option" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/poulpy.jpg" class="avatar-option" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/panthere.jpg" class="avatar-option" alt="avatar"></div>
+      <button type="button" class="avatar-arrow" id="avatarNext" aria-label="Avatars suivants" disabled="">›</button>
+    </div>
 
     <div class="field-label">Couleur de ton pseudo</div>
-    <div class="color-picker" id="colorPicker"></div>
+    <div class="color-picker" id="colorPicker"><button type="button" class="color-swatch selected" style="background: rgb(222, 40, 124);" aria-label="Couleur #DE287C"></button><button type="button" class="color-swatch" style="background: rgb(232, 89, 12);" aria-label="Couleur #E8590C"></button><button type="button" class="color-swatch" style="background: rgb(196, 154, 0);" aria-label="Couleur #C49A00"></button><button type="button" class="color-swatch" style="background: rgb(47, 158, 68);" aria-label="Couleur #2F9E44"></button><button type="button" class="color-swatch" style="background: rgb(28, 126, 214);" aria-label="Couleur #1C7ED6"></button><button type="button" class="color-swatch" style="background: rgb(112, 72, 232);" aria-label="Couleur #7048E8"></button><button type="button" class="color-swatch" style="background: rgb(174, 62, 201);" aria-label="Couleur #AE3EC9"></button><button type="button" class="color-swatch" style="background: rgb(32, 26, 26);" aria-label="Couleur #201A1A"></button><input type="color" class="color-custom" title="Autre couleur"></div>
 
-    <input type="text" id="commentName" placeholder="Ton prénom / pseudo" maxlength="40" required>
-    <textarea id="commentMessage" placeholder="Écris ton commentaire..." maxlength="500" required></textarea>
+    <div class="reply-banner" id="replyBanner" hidden="">
+      <span id="replyText"></span>
+      <button type="button" id="replyCancel" aria-label="Annuler la réponse">✕</button>
+    </div>
+
+    <input type="text" id="commentName" placeholder="Ton prénom / pseudo" maxlength="40" required="" style="color: rgb(222, 40, 124);">
+    <textarea id="commentMessage" placeholder="Écris ton commentaire..." maxlength="500" required=""></textarea>
     <button type="submit" id="commentSubmit">Poster</button>
     <p class="comment-status" id="commentStatus"></p>
   </form>
@@ -232,7 +309,7 @@
 
   // Tes avatars (liens File Garden)
   const avatarOptions = [
-    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/Triceratops_White.jpg',
+      'https://file.garden/aqhkDYVXU6gQXMU7/avatar/Triceratops_White.jpg',
     'https://file.garden/aqhkDYVXU6gQXMU7/avatar/sorciere.png',
     'https://file.garden/aqhkDYVXU6gQXMU7/avatar/rat.jpg',
     'https://file.garden/aqhkDYVXU6gQXMU7/avatar/raton.jpg',
@@ -314,11 +391,34 @@
       img.alt = 'avatar';
       img.addEventListener('click', () => {
         selectedAvatar = url;
-        renderAvatarPicker();
+        // on change juste la sélection, sans reconstruire (sinon la ligne revient au début)
+        avatarPickerEl.querySelectorAll('.avatar-option').forEach(i => {
+          i.classList.toggle('selected', i === img);
+        });
       });
       avatarPickerEl.appendChild(img);
     });
+    updateAvatarArrows();
   }
+
+  // Flèches : font défiler la ligne d'avatars
+  const avatarPrevEl = document.getElementById('avatarPrev');
+  const avatarNextEl = document.getElementById('avatarNext');
+
+  function updateAvatarArrows() {
+    const max = avatarPickerEl.scrollWidth - avatarPickerEl.clientWidth;
+    avatarPrevEl.disabled = avatarPickerEl.scrollLeft <= 1;
+    avatarNextEl.disabled = avatarPickerEl.scrollLeft >= max - 1;
+  }
+
+  avatarPrevEl.addEventListener('click', () => {
+    avatarPickerEl.scrollBy({ left: -112, behavior: 'smooth' });
+  });
+  avatarNextEl.addEventListener('click', () => {
+    avatarPickerEl.scrollBy({ left: 112, behavior: 'smooth' });
+  });
+  avatarPickerEl.addEventListener('scroll', updateAvatarArrows);
+  window.addEventListener('resize', updateAvatarArrows);
 
   function renderColorPicker() {
     colorPickerEl.innerHTML = '';
@@ -352,47 +452,98 @@
     commentNameEl.style.color = selectedColor;
   }
 
+  // --- Réponses ---
+  let replyTarget = null; // { id: commentaire racine, name: pseudo visé }
+  const replyBannerEl = document.getElementById('replyBanner');
+  const replyTextEl = document.getElementById('replyText');
+
+  function startReply(rootId, name, isReply) {
+    replyTarget = { id: rootId, name };
+    replyTextEl.textContent = '↪ Réponse à ' + name;
+    replyBannerEl.hidden = false;
+    // Répondre à une réponse : on garde le même fil, avec une mention
+    commentMessageEl.value = isReply ? '@' + name + ' ' : '';
+    commentMessageEl.focus();
+  }
+
+  function cancelReply() {
+    replyTarget = null;
+    replyBannerEl.hidden = true;
+  }
+  document.getElementById('replyCancel').addEventListener('click', cancelReply);
+
+  function buildComment(c, rootId, isReply) {
+    const item = document.createElement('div');
+    item.className = 'comment-item';
+
+    const avatar = document.createElement('img');
+    avatar.className = 'comment-avatar';
+    avatar.src = c.avatar_url;
+    avatar.alt = '';
+
+    const body = document.createElement('div');
+    body.className = 'comment-body';
+
+    const top = document.createElement('div');
+    top.className = 'comment-top';
+
+    const name = document.createElement('span');
+    name.className = 'comment-name';
+    name.textContent = c.name;
+    name.style.color = safeColor(c.name_color);
+
+    const date = document.createElement('span');
+    date.className = 'comment-date';
+    date.textContent = formatDate(c.created_at);
+
+    const text = document.createElement('div');
+    text.className = 'comment-text';
+    text.textContent = c.message;
+
+    const replyBtn = document.createElement('button');
+    replyBtn.type = 'button';
+    replyBtn.className = 'reply-btn';
+    replyBtn.textContent = 'Répondre';
+    replyBtn.addEventListener('click', () => startReply(rootId, c.name, isReply));
+
+    top.appendChild(name);
+    top.appendChild(date);
+    body.appendChild(top);
+    body.appendChild(text);
+    body.appendChild(replyBtn);
+    item.appendChild(avatar);
+    item.appendChild(body);
+    return item;
+  }
+
   function renderComments(comments) {
     commentsListEl.innerHTML = '';
     if (!comments || comments.length === 0) {
       commentsListEl.innerHTML = '<p class="comments-empty">Aucun commentaire pour l\'instant. Sois le premier !</p>';
       return;
     }
-    comments.forEach(c => {
-      const item = document.createElement('div');
-      item.className = 'comment-item';
 
-      const avatar = document.createElement('img');
-      avatar.className = 'comment-avatar';
-      avatar.src = c.avatar_url;
-      avatar.alt = '';
+    // Commentaires principaux : du plus récent au plus ancien.
+    // Réponses : dans l'ordre de la conversation (les plus anciennes d'abord).
+    const roots = comments.filter(c => !c.parent_id);
+    const repliesByParent = {};
+    comments
+      .filter(c => c.parent_id)
+      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+      .forEach(c => {
+        (repliesByParent[c.parent_id] = repliesByParent[c.parent_id] || []).push(c);
+      });
 
-      const body = document.createElement('div');
-      body.className = 'comment-body';
+    roots.forEach(root => {
+      commentsListEl.appendChild(buildComment(root, root.id, false));
 
-      const top = document.createElement('div');
-      top.className = 'comment-top';
-
-      const name = document.createElement('span');
-      name.className = 'comment-name';
-      name.textContent = c.name;
-      name.style.color = safeColor(c.name_color);
-
-      const date = document.createElement('span');
-      date.className = 'comment-date';
-      date.textContent = formatDate(c.created_at);
-
-      const text = document.createElement('div');
-      text.className = 'comment-text';
-      text.textContent = c.message;
-
-      top.appendChild(name);
-      top.appendChild(date);
-      body.appendChild(top);
-      body.appendChild(text);
-      item.appendChild(avatar);
-      item.appendChild(body);
-      commentsListEl.appendChild(item);
+      const replies = repliesByParent[root.id];
+      if (replies && replies.length) {
+        const box = document.createElement('div');
+        box.className = 'comment-replies';
+        replies.forEach(r => box.appendChild(buildComment(r, root.id, true)));
+        commentsListEl.appendChild(box);
+      }
     });
   }
 
@@ -415,9 +566,9 @@
   }
 
   async function postComment(name, message, avatarUrl, color) {
-    const { error } = await supabaseClient
-      .from('comments')
-      .insert({ name, message, avatar_url: avatarUrl, name_color: safeColor(color) });
+    const row = { name, message, avatar_url: avatarUrl, name_color: safeColor(color) };
+    if (replyTarget) row.parent_id = replyTarget.id;   // seulement pour une réponse
+    const { error } = await supabaseClient.from('comments').insert(row);
     if (error) throw error;
   }
 
@@ -438,6 +589,7 @@
     try {
       await postComment(name, message, selectedAvatar, selectedColor);
       commentMessageEl.value = '';
+      cancelReply();
       commentStatusEl.textContent = 'Commentaire publié !';
       await fetchComments();
     } catch (err) {
@@ -453,6 +605,617 @@
   renderColorPicker();
   fetchComments();
 </script>
+
+
+
+</body>
+<html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commentaires — Ezrarchives</title>
+<style>
+  :root {
+    --accent: #DE287C;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --ink: #201A1A;
+    --ink-soft: #6b5f63;
+    --line: #f0d9e3;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: transparent;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--ink);
+  }
+
+  .comments-panel {
+    height: 100%;
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .comments-header {
+    font-weight: bold;
+    font-size: 16px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+
+  /* On scrolle DANS cette zone, jamais en dehors de la boîte */
+  .comments-list {
+    overflow-y: auto;
+    padding: 6px 16px;
+    flex: 1;
+    min-height: 80px;
+  }
+
+  .comment-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .comment-item:last-child { border-bottom: none; }
+
+  .comment-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--line);
+  }
+
+  .comment-body { min-width: 0; flex: 1; }
+
+  .comment-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 8px;
+    margin-bottom: 3px;
+  }
+
+  .comment-name {
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--accent);
+    word-wrap: break-word;
+  }
+
+  .comment-date {
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+
+  .comment-text {
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .comments-empty {
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 20px 8px;
+  }
+
+  /* --- Formulaire --- */
+  .comment-form {
+    flex-shrink: 0;
+    border-top: 1px solid var(--line);
+    padding: 12px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #fff;
+  }
+
+  .field-label {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: -2px;
+  }
+
+  .avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .avatar-picker {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    padding: 4px 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .avatar-picker::-webkit-scrollbar { display: none; }
+
+  .avatar-arrow {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--accent);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0 2px;
+  }
+  .avatar-arrow:hover:not(:disabled) { background: #FFEAF4; }
+  .avatar-arrow:disabled { opacity: 0.3; cursor: default; }
+
+  .avatar-option {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 3px solid transparent;
+    opacity: 0.55;
+    transition: opacity 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .avatar-option:hover { opacity: 0.9; transform: scale(1.05); }
+  .avatar-option.selected {
+    opacity: 1;
+    border-color: var(--accent);
+  }
+
+  .color-picker {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  .color-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px var(--line);
+    cursor: pointer;
+    padding: 0;
+  }
+  .color-swatch.selected {
+    box-shadow: 0 0 0 2px var(--ink);
+  }
+
+  .color-custom {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .comment-form input[type="text"],
+  .comment-form textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 10px;
+    resize: none;
+    background: #ffffff;
+    color: var(--ink);
+  }
+  .comment-form input[type="text"] { font-weight: bold; }
+  .comment-form textarea { min-height: 54px; }
+
+  .comment-form button[type="submit"] {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .comment-form button[type="submit"]:disabled { opacity: 0.5; cursor: default; }
+
+  .comment-status {
+    margin: 0;
+    font-size: 12px;
+    color: var(--ink-soft);
+    min-height: 14px;
+  }
+  /* --- Réponses --- */
+  .comment-replies {
+    margin: 0 0 6px 28px;
+    padding-left: 12px;
+    border-left: 3px solid var(--line);
+  }
+  .comment-replies .comment-item { padding: 10px 0; }
+  .comment-replies .comment-avatar { width: 42px; height: 42px; }
+  .comment-replies .comment-name { font-size: 14px; }
+
+  .reply-btn {
+    background: none;
+    border: none;
+    padding: 4px 0 0;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .reply-btn:hover { color: var(--accent); text-decoration: underline; }
+
+  .reply-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: #FFEAF4;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .reply-banner[hidden] { display: none; }
+  .reply-banner button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<div class="comments-panel">
+  <div class="comments-header">💬 Commentaires</div>
+
+  <div class="comments-list" id="commentsList"><div class="comment-item"><img class="comment-avatar" src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/panthere.jpg" alt=""><div class="comment-body"><div class="comment-top"><span class="comment-name" style="color: rgb(222, 40, 124);">ezra</span><span class="comment-date">23 octobre 2026 à 00:38</span></div><div class="comment-text">ouiiiiiii</div><button type="button" class="reply-btn">Répondre</button></div></div><div class="comment-item"><img class="comment-avatar" src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/panthere.jpg" alt=""><div class="comment-body"><div class="comment-top"><span class="comment-name" style="color: rgb(222, 40, 124);">ezra</span><span class="comment-date">23 octobre 2026 à 00:26</span></div><div class="comment-text">stp marche</div><button type="button" class="reply-btn">Répondre</button></div></div></div>
+
+  <form class="comment-form" id="commentForm">
+    <div class="field-label">Ton avatar</div>
+    <div class="avatar-row">
+      <button type="button" class="avatar-arrow" id="avatarPrev" aria-label="Avatars précédents" disabled="">‹</button>
+      <div class="avatar-picker" id="avatarPicker"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/Triceratops_White.jpg" class="avatar-option selected" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/sorciere.png" class="avatar-option" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/rat.jpg" class="avatar-option" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/raton.jpg" class="avatar-option" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/poulpy.jpg" class="avatar-option" alt="avatar"><img src="https://file.garden/aqhkDYVXU6gQXMU7/avatar/panthere.jpg" class="avatar-option" alt="avatar"></div>
+      <button type="button" class="avatar-arrow" id="avatarNext" aria-label="Avatars suivants" disabled="">›</button>
+    </div>
+
+    <div class="field-label">Couleur de ton pseudo</div>
+    <div class="color-picker" id="colorPicker"><button type="button" class="color-swatch selected" style="background: rgb(222, 40, 124);" aria-label="Couleur #DE287C"></button><button type="button" class="color-swatch" style="background: rgb(232, 89, 12);" aria-label="Couleur #E8590C"></button><button type="button" class="color-swatch" style="background: rgb(196, 154, 0);" aria-label="Couleur #C49A00"></button><button type="button" class="color-swatch" style="background: rgb(47, 158, 68);" aria-label="Couleur #2F9E44"></button><button type="button" class="color-swatch" style="background: rgb(28, 126, 214);" aria-label="Couleur #1C7ED6"></button><button type="button" class="color-swatch" style="background: rgb(112, 72, 232);" aria-label="Couleur #7048E8"></button><button type="button" class="color-swatch" style="background: rgb(174, 62, 201);" aria-label="Couleur #AE3EC9"></button><button type="button" class="color-swatch" style="background: rgb(32, 26, 26);" aria-label="Couleur #201A1A"></button><input type="color" class="color-custom" title="Autre couleur"></div>
+
+    <div class="reply-banner" id="replyBanner" hidden="">
+      <span id="replyText"></span>
+      <button type="button" id="replyCancel" aria-label="Annuler la réponse">✕</button>
+    </div>
+
+    <input type="text" id="commentName" placeholder="Ton prénom / pseudo" maxlength="40" required="" style="color: rgb(222, 40, 124);">
+    <textarea id="commentMessage" placeholder="Écris ton commentaire..." maxlength="500" required=""></textarea>
+    <button type="submit" id="commentSubmit">Poster</button>
+    <p class="comment-status" id="commentStatus"></p>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://ynucsbhmipuluzkxvvue.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_AnA7LeZfs39cRWhBIra8OQ_udSJD9IU';
+
+  // Tes avatars (liens File Garden)
+  const avatarOptions = [
+      'https://file.garden/aqhkDYVXU6gQXMU7/avatar/Triceratops_White.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/sorciere.png',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/rat.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/raton.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/poulpy.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/cat.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/panthere.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/meyra.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/caillou.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/tomate.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/soleil.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/lune.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/grasshopper.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/foug%C3%A8re.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/coccinelle.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/arti.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/pandajpg.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/starlight%20glimmer.png',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/lapin.png',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/hyene.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/geai%20des%20chenes.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/escargot.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/engin.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/Dracaufeu-RFVF.png',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/coussinet.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/chien.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/champi.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/carapuce.jpg',
+    'https://file.garden/aqhkDYVXU6gQXMU7/avatar/baleine-bosse.jpg'
+  ];
+
+  // Couleurs proposées pour les pseudos (en plus du sélecteur libre)
+  const colorOptions = [
+    '#DE287C', '#E8590C', '#C49A00', '#2F9E44',
+    '#1C7ED6', '#7048E8', '#AE3EC9', '#201A1A'
+  ];
+
+  let selectedAvatar = avatarOptions[0];
+  let selectedColor = colorOptions[0];
+  let supabaseClient = null;
+
+  try {
+    if (window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+  } catch (e) {
+    console.error('Supabase non configuré correctement :', e);
+  }
+
+  const commentsListEl = document.getElementById('commentsList');
+  const commentFormEl = document.getElementById('commentForm');
+  const commentNameEl = document.getElementById('commentName');
+  const commentMessageEl = document.getElementById('commentMessage');
+  const commentSubmitEl = document.getElementById('commentSubmit');
+  const commentStatusEl = document.getElementById('commentStatus');
+  const avatarPickerEl = document.getElementById('avatarPicker');
+  const colorPickerEl = document.getElementById('colorPicker');
+
+  // N'accepte qu'une couleur du type #aabbcc (évite tout contenu étrange)
+  function safeColor(c) {
+    return /^#[0-9a-fA-F]{6}$/.test(c || '') ? c : '#DE287C';
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (isNaN(d)) return '';
+    return d.toLocaleString('fr-FR', {
+      day: 'numeric', month: 'long', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+  }
+
+  function renderAvatarPicker() {
+    avatarPickerEl.innerHTML = '';
+    avatarOptions.forEach(url => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.className = 'avatar-option' + (url === selectedAvatar ? ' selected' : '');
+      img.alt = 'avatar';
+      img.addEventListener('click', () => {
+        selectedAvatar = url;
+        // on change juste la sélection, sans reconstruire (sinon la ligne revient au début)
+        avatarPickerEl.querySelectorAll('.avatar-option').forEach(i => {
+          i.classList.toggle('selected', i === img);
+        });
+      });
+      avatarPickerEl.appendChild(img);
+    });
+    updateAvatarArrows();
+  }
+
+  // Flèches : font défiler la ligne d'avatars
+  const avatarPrevEl = document.getElementById('avatarPrev');
+  const avatarNextEl = document.getElementById('avatarNext');
+
+  function updateAvatarArrows() {
+    const max = avatarPickerEl.scrollWidth - avatarPickerEl.clientWidth;
+    avatarPrevEl.disabled = avatarPickerEl.scrollLeft <= 1;
+    avatarNextEl.disabled = avatarPickerEl.scrollLeft >= max - 1;
+  }
+
+  avatarPrevEl.addEventListener('click', () => {
+    avatarPickerEl.scrollBy({ left: -112, behavior: 'smooth' });
+  });
+  avatarNextEl.addEventListener('click', () => {
+    avatarPickerEl.scrollBy({ left: 112, behavior: 'smooth' });
+  });
+  avatarPickerEl.addEventListener('scroll', updateAvatarArrows);
+  window.addEventListener('resize', updateAvatarArrows);
+
+  function renderColorPicker() {
+    colorPickerEl.innerHTML = '';
+    colorOptions.forEach(color => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'color-swatch' + (color.toLowerCase() === selectedColor.toLowerCase() ? ' selected' : '');
+      btn.style.background = color;
+      btn.setAttribute('aria-label', 'Couleur ' + color);
+      btn.addEventListener('click', () => {
+        selectedColor = color;
+        renderColorPicker();
+      });
+      colorPickerEl.appendChild(btn);
+    });
+
+    const custom = document.createElement('input');
+    custom.type = 'color';
+    custom.className = 'color-custom';
+    custom.value = safeColor(selectedColor);
+    custom.title = 'Autre couleur';
+    custom.addEventListener('input', () => {
+      selectedColor = custom.value;
+      // on met à jour l'aperçu sans reconstruire (sinon le sélecteur se ferme)
+      colorPickerEl.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+      commentNameEl.style.color = selectedColor;
+    });
+    colorPickerEl.appendChild(custom);
+
+    // Le champ pseudo s'affiche dans la couleur choisie
+    commentNameEl.style.color = selectedColor;
+  }
+
+  // --- Réponses ---
+  let replyTarget = null; // { id: commentaire racine, name: pseudo visé }
+  const replyBannerEl = document.getElementById('replyBanner');
+  const replyTextEl = document.getElementById('replyText');
+
+  function startReply(rootId, name, isReply) {
+    replyTarget = { id: rootId, name };
+    replyTextEl.textContent = '↪ Réponse à ' + name;
+    replyBannerEl.hidden = false;
+    // Répondre à une réponse : on garde le même fil, avec une mention
+    commentMessageEl.value = isReply ? '@' + name + ' ' : '';
+    commentMessageEl.focus();
+  }
+
+  function cancelReply() {
+    replyTarget = null;
+    replyBannerEl.hidden = true;
+  }
+  document.getElementById('replyCancel').addEventListener('click', cancelReply);
+
+  function buildComment(c, rootId, isReply) {
+    const item = document.createElement('div');
+    item.className = 'comment-item';
+
+    const avatar = document.createElement('img');
+    avatar.className = 'comment-avatar';
+    avatar.src = c.avatar_url;
+    avatar.alt = '';
+
+    const body = document.createElement('div');
+    body.className = 'comment-body';
+
+    const top = document.createElement('div');
+    top.className = 'comment-top';
+
+    const name = document.createElement('span');
+    name.className = 'comment-name';
+    name.textContent = c.name;
+    name.style.color = safeColor(c.name_color);
+
+    const date = document.createElement('span');
+    date.className = 'comment-date';
+    date.textContent = formatDate(c.created_at);
+
+    const text = document.createElement('div');
+    text.className = 'comment-text';
+    text.textContent = c.message;
+
+    const replyBtn = document.createElement('button');
+    replyBtn.type = 'button';
+    replyBtn.className = 'reply-btn';
+    replyBtn.textContent = 'Répondre';
+    replyBtn.addEventListener('click', () => startReply(rootId, c.name, isReply));
+
+    top.appendChild(name);
+    top.appendChild(date);
+    body.appendChild(top);
+    body.appendChild(text);
+    body.appendChild(replyBtn);
+    item.appendChild(avatar);
+    item.appendChild(body);
+    return item;
+  }
+
+  function renderComments(comments) {
+    commentsListEl.innerHTML = '';
+    if (!comments || comments.length === 0) {
+      commentsListEl.innerHTML = '<p class="comments-empty">Aucun commentaire pour l\'instant. Sois le premier !</p>';
+      return;
+    }
+
+    // Commentaires principaux : du plus récent au plus ancien.
+    // Réponses : dans l'ordre de la conversation (les plus anciennes d'abord).
+    const roots = comments.filter(c => !c.parent_id);
+    const repliesByParent = {};
+    comments
+      .filter(c => c.parent_id)
+      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+      .forEach(c => {
+        (repliesByParent[c.parent_id] = repliesByParent[c.parent_id] || []).push(c);
+      });
+
+    roots.forEach(root => {
+      commentsListEl.appendChild(buildComment(root, root.id, false));
+
+      const replies = repliesByParent[root.id];
+      if (replies && replies.length) {
+        const box = document.createElement('div');
+        box.className = 'comment-replies';
+        replies.forEach(r => box.appendChild(buildComment(r, root.id, true)));
+        commentsListEl.appendChild(box);
+      }
+    });
+  }
+
+  async function fetchComments() {
+    if (!supabaseClient) {
+      commentsListEl.innerHTML = '<p class="comments-empty">Espace commentaires indisponible.</p>';
+      return;
+    }
+    const { data: comments, error } = await supabaseClient
+      .from('comments')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error(error);
+      commentsListEl.innerHTML = '<p class="comments-empty">Impossible de charger les commentaires : ' + error.message + '</p>';
+      return;
+    }
+    renderComments(comments);
+  }
+
+  async function postComment(name, message, avatarUrl, color) {
+    const row = { name, message, avatar_url: avatarUrl, name_color: safeColor(color) };
+    if (replyTarget) row.parent_id = replyTarget.id;   // seulement pour une réponse
+    const { error } = await supabaseClient.from('comments').insert(row);
+    if (error) throw error;
+  }
+
+  commentFormEl.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = commentNameEl.value.trim();
+    const message = commentMessageEl.value.trim();
+    if (!name || !message) return;
+
+    if (!supabaseClient) {
+      commentStatusEl.textContent = "L'espace commentaires est indisponible.";
+      return;
+    }
+
+    commentSubmitEl.disabled = true;
+    commentStatusEl.textContent = 'Envoi...';
+
+    try {
+      await postComment(name, message, selectedAvatar, selectedColor);
+      commentMessageEl.value = '';
+      cancelReply();
+      commentStatusEl.textContent = 'Commentaire publié !';
+      await fetchComments();
+    } catch (err) {
+      console.error(err);
+      commentStatusEl.textContent = "Erreur : " + (err && err.message ? err.message : "réessaie.");
+    } finally {
+      commentSubmitEl.disabled = false;
+      setTimeout(() => { commentStatusEl.textContent = ''; }, 6000);
+    }
+  });
+
+  renderAvatarPicker();
+  renderColorPicker();
+  fetchComments();
+</script>
+
+
 
 </body>
 </html>
